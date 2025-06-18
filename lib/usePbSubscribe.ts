@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { usePbMutations } from "./usePbMutations";
 import type { RecordSubscription } from "pocketbase";
 import { usePbCollection } from "./usePbCollection";
@@ -6,7 +6,6 @@ import { usePbCollection } from "./usePbCollection";
 /**
  * A hook to register a callback to a pocketbase subscription.
  *
- * It is recommended to use a memoized callback (useCallback) to avoid unnecessary re-subscriptions.
  *
  * @param collectionId - The collection ID to subscribe to.
  * @param callback - The callback to be called when a record is updated.
@@ -18,14 +17,25 @@ export function usePbSubscribe(
   topic: string = "*"
 ) {
   const collection = usePbCollection(collectionId);
+  const callbackRef = useRef(callback);
+
+  // Always keep the ref up to date with the latest callback
+  useEffect(() => {
+    callbackRef.current = callback;
+  }, [callback]);
 
   useEffect(() => {
-    const unsubscribePromise = collection.subscribe(topic, callback);
+    // Wrapper that always calls the latest callback
+    const stableCallback = (data: RecordSubscription) => {
+      callbackRef.current(data);
+    };
+
+    const unsubscribePromise = collection.subscribe(topic, stableCallback);
 
     return () => {
       unsubscribePromise.then((unsubscribe) => unsubscribe());
     };
-  }, [collection, topic, callback]);
+  }, [collection, topic]);
 }
 
 /**
@@ -41,11 +51,5 @@ export function usePbSubscribe(
 export function usePbLive(collectionId: string, topic: string = "*") {
   const { invalidate } = usePbMutations(collectionId);
 
-  usePbSubscribe(
-    collectionId,
-    useCallback(() => {
-      invalidate();
-    }, [invalidate]),
-    topic
-  );
+  usePbSubscribe(collectionId, () => invalidate(), topic);
 }

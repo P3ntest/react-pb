@@ -1,5 +1,7 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { usePbCollection } from "./usePbCollection";
+import type { ClientResponseError } from "pocketbase";
+import { usePbAuthStore } from "./usePocketBase";
 
 /**
  * An opinionated hook to automatically refresh the PocketBase auth store.
@@ -20,17 +22,29 @@ export function usePbAuthRefresh(
   }
 ) {
   const collection = usePbCollection(authCollectionId);
+  const authStore = usePbAuthStore();
+
+  const refresh = useCallback(() => {
+    collection.authRefresh().catch((error: ClientResponseError) => {
+      if (error.status === 401) {
+        // If the user is unauthorized, clear the auth store
+        authStore.clear();
+        return;
+      }
+      throw error; // rethrow other errors
+    });
+  }, [collection, authStore]);
 
   useEffect(() => {
     // once on mount
-    collection.authRefresh();
-  }, [collection]);
+    refresh();
+  }, [collection, refresh]);
 
   // listen for refocus window by adding event listener to document: "visibilitychange"
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.visibilityState === "visible") {
-        collection.authRefresh();
+        refresh();
       }
     };
 
@@ -39,7 +53,7 @@ export function usePbAuthRefresh(
     return () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, [collection]);
+  }, [collection, refresh]);
 
   useEffect(() => {
     if (!intervalMs || intervalMs <= 0) {
@@ -47,11 +61,11 @@ export function usePbAuthRefresh(
     }
 
     const intervalId = setInterval(() => {
-      collection.authRefresh();
+      refresh();
     }, intervalMs);
 
     return () => {
       clearInterval(intervalId);
     };
-  }, [collection, intervalMs]);
+  }, [collection, intervalMs, authStore, refresh]);
 }

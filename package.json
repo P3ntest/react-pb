@@ -1,6 +1,6 @@
 {
   "name": "use-pocketbase",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "type": "module",
   "main": "dist/use-pocketbase.js",
   "types": "dist/index.d.ts",

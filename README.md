@@ -1,3 +1,5 @@
+![Header](./your-header-image-name.png)
+
 # `use-pocketbase` React Library
 
 A React library for working with [PocketBase](https://pocketbase.io/) using [React Query](https://react-query.tanstack.com/) under the hood.

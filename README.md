@@ -1,4 +1,4 @@
-# PocketBase React Query
+# React PocketBase `react-pb`
 
 A React library for working with [PocketBase](https://pocketbase.io/) using [React Query](https://react-query.tanstack.com/).
 
@@ -10,4 +10,5 @@ This library follows reactive patterns more closely than `pocketbase-react`, whi
 
 ## Installation
 
-TODO:
+`npm install react-pb`
+`bun add react-pb`

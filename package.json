@@ -4,6 +4,20 @@
   "type": "module",
   "main": "dist/use-pocketbase.js",
   "types": "dist/index.d.ts",
+  "keywords": [
+    "pocketbase",
+    "pocketbase.io",
+    "react",
+    "react-query",
+    "hooks",
+    "use-pocketbase",
+    "usePocketbase",
+    "pocketbase-react",
+    "react-pocketbase",
+    "pocketbase-hooks",
+    "pocketbase-react-hooks",
+    "open-source"
+  ],
   "author": {
     "name": "Julius van Voorden (@p3ntest)",
     "email": "julius@vanvoorden.dev"

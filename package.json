@@ -1,8 +1,18 @@
 {
   "name": "use-pocketbase",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "type": "module",
-  "main": "dist/react-pb.js",
+  "main": "dist/use-pocketbase.js",
+  "types": "dist/index.d.ts",
+  "author": {
+    "name": "Julius van Voorden (@p3ntest)",
+    "email": "julius@vanvoorden.dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/P3ntest/use-pocketbase"
+  },
+  "homepage": "https://github.com/P3ntest/use-pocketbase",
   "files": [
     "dist"
   ],

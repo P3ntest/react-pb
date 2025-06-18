@@ -21,10 +21,11 @@ export function PocketBase({
 
   children?: React.ReactNode;
 }) {
-  const pb = useMemo(
-    () => new PocketBaseClient(baseUrl, authStore, lang),
-    [baseUrl, authStore, lang]
-  );
+  const pb = useMemo(() => {
+    const pb = new PocketBaseClient(baseUrl, authStore, lang);
+    pb.autoCancellation(false); // Disable auto-cancellation to avoid issues with React Query
+    return pb;
+  }, [baseUrl, authStore, lang]);
 
   const queryClient = useMemo(() => new QueryClient(), []);
 

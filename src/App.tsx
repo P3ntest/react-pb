@@ -1,7 +1,7 @@
 import { PocketBase } from "../lib/PocketBase";
-import { usePbCollection } from "../lib/useCollection";
+import { usePbCollection } from "../lib/usePbCollection";
 import { usePbAuthStore } from "../lib/usePocketBase";
-import { usePbList, usePbOne } from "../lib/useRecord";
+import { usePbList, usePbOne } from "../lib/pbQueryHooks";
 
 export function App() {
   return (

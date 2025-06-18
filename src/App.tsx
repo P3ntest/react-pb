@@ -2,6 +2,8 @@ import { PocketBase } from "../lib/PocketBase";
 import { usePbCollection } from "../lib/usePbCollection";
 import { usePbAuthStore } from "../lib/usePocketBase";
 import { usePbList, usePbOne } from "../lib/pbQueryHooks";
+import { usePbMutations } from "../lib/usePbMutations";
+import { PbSubscription } from "../lib/PbSubscription";
 
 export function App() {
   return (
@@ -52,24 +54,41 @@ export function Auth() {
 
 function ListTest() {
   const { data } = usePbList("posts");
+  const { create } = usePbMutations("posts");
 
   if (!data) {
     return <div>Loading...</div>;
   }
 
   return (
-    <ul>
-      {data.items.map((item) => (
-        <li key={item.id}>
-          <ItemTest id={item.id} />
-        </li>
-      ))}
-    </ul>
+    <>
+      <PbSubscription collectionId="posts" />
+      <button
+        onClick={() => {
+          create.mutate({
+            content:
+              Math.random().toString(36).substring(2, 15) +
+              " " +
+              Math.random().toString(36).substring(2, 15),
+          });
+        }}
+      >
+        Create Random Post
+      </button>
+      <ul>
+        {data.items.map((item) => (
+          <li key={item.id}>
+            <ItemTest id={item.id} />
+          </li>
+        ))}
+      </ul>
+    </>
   );
 }
 
 function ItemTest({ id }: { id: string }) {
   const { data, error } = usePbOne("posts", id);
+  const { update, deleteRecord } = usePbMutations("posts");
   if (error) {
     return <div>Error loading item: {JSON.stringify(error)}</div>;
   }
@@ -81,6 +100,26 @@ function ItemTest({ id }: { id: string }) {
     <div>
       <h2>Item {data.id}</h2>
       <p>{data.content}</p>
+      <button
+        onClick={() => {
+          update.mutate({
+            id: data.id,
+            content:
+              Math.random().toString(36).substring(2, 15) +
+              " " +
+              Math.random().toString(36).substring(2, 15),
+          });
+        }}
+      >
+        set to random content
+      </button>
+      <button
+        onClick={() => {
+          deleteRecord.mutate(data.id);
+        }}
+      >
+        Delete
+      </button>
     </div>
   );
 }

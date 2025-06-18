@@ -7,7 +7,7 @@ export function PbSubscription({
   topic = "*",
 }: {
   collectionId: string;
-  topic: string;
+  topic?: string;
 }) {
   const pb = usePocketBase();
 
@@ -24,4 +24,6 @@ export function PbSubscription({
       unsubscribePromise.then((unsubscribe) => unsubscribe());
     };
   }, [pb, collectionId, topic, invalidate]);
+
+  return null;
 }

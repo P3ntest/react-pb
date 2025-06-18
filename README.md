@@ -64,5 +64,3 @@ function List() {
   );
 }
 ```
-
-## Api Reference

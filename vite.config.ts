@@ -15,11 +15,18 @@ export default defineConfig({
   build: {
     copyPublicDir: false,
     lib: {
-      name: "react-pb",
+      name: "use-pocketbase",
       entry: resolve(__dirname, "lib/index.ts"),
+      formats: ["es"],
     },
     rollupOptions: {
-      external: ["react", "react-dom", "react/jsx-runtime", "pocketbase"],
+      external: [
+        "react",
+        "react-dom",
+        "react/jsx-runtime",
+        "pocketbase",
+        "@tanstack/react-query",
+      ],
     },
   },
 });

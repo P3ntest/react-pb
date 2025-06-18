@@ -8,7 +8,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
  * Creates and provides a PocketBase client instance.
  * @param authStore - Make sure this is memoized to avoid unnecessary re-connecting and client recreations.
  */
-export function PocketBase({
+export function PocketBaseProvider({
   baseUrl,
   authStore,
   lang,

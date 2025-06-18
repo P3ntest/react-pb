@@ -6,6 +6,14 @@ import type {
 import { useQuery } from "@tanstack/react-query";
 import { usePbCollection } from "./usePbCollection";
 
+/**
+ * Use this hook to fetch a single record from a PocketBase collection.
+ *
+ * @param collectionId
+ * @param id
+ * @param options
+ * @returns
+ */
 export function usePbOne(
   collectionId: string,
   id: string,
@@ -19,6 +27,13 @@ export function usePbOne(
   });
 }
 
+/**
+ * Use this hook to fetch a list of records from a PocketBase collection.
+ *
+ * @param collectionId
+ * @param props
+ * @returns
+ */
 export function usePbList(
   collectionId: string,
   props: {
@@ -37,6 +52,14 @@ export function usePbList(
   });
 }
 
+/**
+ * Use this hook to fetch the first record from a PocketBase collection based on a filter.
+ *
+ * @param collectionId
+ * @param filter
+ * @param options
+ * @returns
+ */
 export function usePbFirst(
   collectionId: string,
   filter: string,
@@ -50,6 +73,13 @@ export function usePbFirst(
   });
 }
 
+/**
+ * Use this hook to fetch the full list of records from a PocketBase collection.
+ *
+ * @param collectionId
+ * @param options
+ * @returns
+ */
 export function usePbFullList(
   collectionId: string,
   options: RecordFullListOptions = {}

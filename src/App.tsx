@@ -1,26 +1,28 @@
-import { PocketBase } from "../lib/PocketBase";
+import { PocketBaseProvider } from "../lib/PocketBaseProvider";
 import { usePbCollection } from "../lib/usePbCollection";
 import { usePbAuthStore } from "../lib/usePocketBase";
 import { usePbList, usePbOne } from "../lib/pbQueryHooks";
 import { usePbMutations } from "../lib/usePbMutations";
-import { PbSubscription } from "../lib/PbSubscription";
+import { usePbLive } from "../lib/usePbSubscribe";
+import { usePbAuthRefresh } from "../lib";
 
 export function App() {
   return (
-    <PocketBase baseUrl="http://localhost:8090">
+    <PocketBaseProvider baseUrl="http://localhost:8090">
       <Auth />
-    </PocketBase>
+    </PocketBaseProvider>
   );
 }
 
 export function Auth() {
   const authStore = usePbAuthStore();
   const users = usePbCollection("users");
+  usePbAuthRefresh("users");
 
   if (authStore.isValid) {
     return (
       <div>
-        <h1>Welcome, {authStore.record!.email}!</h1>
+        <h1>Welcome, {authStore.record!.name}!</h1>
         <button onClick={() => authStore.clear()}>Logout</button>
         <h2>Posts</h2>
         <ListTest />
@@ -55,6 +57,7 @@ export function Auth() {
 function ListTest() {
   const { data } = usePbList("posts");
   const { create } = usePbMutations("posts");
+  usePbLive("posts");
 
   if (!data) {
     return <div>Loading...</div>;
@@ -62,7 +65,6 @@ function ListTest() {
 
   return (
     <>
-      <PbSubscription collectionId="posts" />
       <button
         onClick={() => {
           create.mutate({

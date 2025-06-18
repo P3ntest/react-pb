@@ -1,13 +1,24 @@
 import { useEffect } from "react";
 import { usePbCollection } from "./usePbCollection";
 
-export function PbAuthRefresher({
-  authCollectionId,
-  interval = 60 * 60 * 1000, // default to 1 hour
-}: {
-  authCollectionId: string;
-  interval?: number; // in milliseconds
-}) {
+/**
+ * An opinionated hook to automatically refresh the PocketBase auth store.
+ * It will refresh on mount, on window refocus, and at a specified interval.
+ *
+ * @param authCollectionId - The collection ID for the PocketBase auth store.
+ * @param options - Options for the hook.
+ * @param options.intervalMs - The interval in milliseconds to refresh the auth store. Defaults to 1 hour (3600000 ms). Set to 0 or undefined to disable the interval.
+ */
+export function usePbAuthRefresh(
+  authCollectionId: string,
+  {
+    intervalMs,
+  }: {
+    intervalMs?: number; // in milliseconds, default to 1 hour
+  } = {
+    intervalMs: 60 * 60 * 1000, // default to 1 hour
+  }
+) {
   const collection = usePbCollection(authCollectionId);
 
   useEffect(() => {
@@ -31,18 +42,16 @@ export function PbAuthRefresher({
   }, [collection]);
 
   useEffect(() => {
-    if (!interval || interval <= 0) {
+    if (!intervalMs || intervalMs <= 0) {
       return () => {}; // No interval set, no cleanup needed
     }
 
     const intervalId = setInterval(() => {
       collection.authRefresh();
-    }, interval);
+    }, intervalMs);
 
     return () => {
       clearInterval(intervalId);
     };
-  }, [collection, interval]);
-
-  return null;
+  }, [collection, intervalMs]);
 }

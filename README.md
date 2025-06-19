@@ -16,7 +16,19 @@ This library follows reactive patterns more closely than `pocketbase-react`, whi
 
 `use-pocketbase` relies on `pocketbase` and `@tanstack/react-query` as peer dependencies, so you need to install them as well.
 
-`npm install use-pocketbase pocketbase @tanstack/react-query`
+```bash
+npm install use-pocketbase pocketbase @tanstack/react-query
+```
+```bash
+pnpm install use-pocketbase pocketbase @tanstack/react-query
+```
+```bash
+bun install use-pocketbase pocketbase @tanstack/react-query
+```
+```bash
+yarn install use-pocketbase pocketbase @tanstack/react-query
+```
+
 
 ## Usage
 
